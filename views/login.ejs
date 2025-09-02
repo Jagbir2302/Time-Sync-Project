@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/login.css">
+  </head>
+
+  <body>
+
+    <div class="login-wrapper">
+      <div class="left-panel">
+        <h1>Welcome Back</h1>
+        <p>Log in to access your schedule, leave requests, and more.</p>
+      </div>
+
+      <div class="right-panel">
+        <h2>Login</h2>
+        <form action="/login" method="POST">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="Enter your email" required>
+
+          <label>Password</label>
+          <input type="password" name="password" placeholder="Enter your password" required>
+
+          <button type="submit">Login</button>
+
+          <div class="forgot-password">
+            <a href="/forgot">Forgot Password?</a>
+          </div>
+        </form>
+
+        <div class="signup-link">
+          I have no account? <a href="/signup">Signup</a>
+        </div>
+        
+      </div>
+    </div>
+
+  </body>
+
+</html>

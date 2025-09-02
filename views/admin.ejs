@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard - Schedule Sync</title>
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+<div class="container">
+
+  
+  <%- include('partials/sidebar') %>
+
+  
+  <div class="main">
+
+    
+    <%- include('partials/header') %>
+
+    
+    <div class="time-table-section">
+      <div class="time-table-header">
+        <form id="teacherForm" method="get" action="/admin">   
+          <!-- render here -->
+          <select name="teacherId" id="teacherSelect" onchange="document.getElementById('teacherForm').submit()">
+            <% teachers.forEach(teacher => { %>
+              
+              <option value="<%= teacher._id %>" <%= teacher._id.toString() === selectedTeacherId ? 'selected' : '' %>><%= teacher.name %> - <%= teacher.email %></option>
+
+            <% }) %>
+          </select>
+        </form>
+
+        <h3>Time Table</h3>
+
+        <button class="add-btn" onclick="goToAssignPage()">Add Time Table Details</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Days/Time</th>
+            <% for (let i = 1; i <= 8; i++) { %>
+              <th>Period <%= i %></th>
+            <% } %>
+          </tr>
+        </thead>
+        <tbody>
+          <% const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; %>
+          <% days.forEach(day => { %>
+            <tr>
+              <td><strong><%= day %></strong></td>
+              <% for (let i = 1; i <= 8; i++) {
+                const lectureName = 'Period ' + i;
+                const entry = timetableData.find(item => item.day === day && item.lecture === lectureName);
+              %>
+                <td>
+                  <% if (entry) { %>
+                    <div class="lecture-box">
+                      <div><strong><%= entry.subject %></strong></div>
+                      <div><%= entry.startTime %> - <%= entry.endTime %></div>
+                      <div>Room: <%= entry.room %></div>
+                      <!-- <div>Status: <%= entry.status || 'Pending' %></div> -->
+
+                      <form action="/assign-timetable/delete" method="POST" class="delete-form">        
+                        <!-- //render here  -->
+                        <input type="hidden" name="teacherId" value="<%= selectedTeacherId %>">
+                        <input type="hidden" name="day" value="<%= day %>">
+                        <input type="hidden" name="lecture" value="<%= lectureName %>">
+                        <button type="submit" class="delete-btn" title="Delete Lecture">×</button>
+                      </form>
+                    </div>
+                  <% } %>
+                </td>
+              <% } %>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  function goToAssignPage() {
+    const teacherId = document.getElementById('teacherSelect').value;
+    window.location.href = `/assign-timetable?teacherId=${teacherId}`;
+  }
+</script>
+
+</body>
+</html>
